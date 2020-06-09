@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2020 at 09:43 PM
+-- Generation Time: Jun 09, 2020 at 11:27 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.7
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `AFrist_Name` varchar(50) NOT NULL,
-  `ALast_Name` varchar(50) DEFAULT NULL,
+  `AID` int(11) NOT NULL,
+  `Ausername` varchar(50) DEFAULT NULL,
   `AEmail` varchar(100) NOT NULL,
   `Apassword` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -43,9 +43,8 @@ CREATE TABLE `admin` (
 
 CREATE TABLE `course` (
   `ID` int(11) NOT NULL,
-  `Name` varchar(30) NOT NULL,
   `Subject` varchar(30) NOT NULL,
-  `Tutor_Email` varchar(100) NOT NULL
+  `TsID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -55,9 +54,9 @@ CREATE TABLE `course` (
 --
 
 CREATE TABLE `ebook` (
-  `Book_Name` varchar(50) DEFAULT NULL,
   `Book_ID` int(11) NOT NULL,
-  `Book_Subject` varchar(30) DEFAULT NULL
+  `Book_Name` varchar(50) DEFAULT NULL,
+  `course_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -67,8 +66,8 @@ CREATE TABLE `ebook` (
 --
 
 CREATE TABLE `parent` (
-  `PFrist_Name` varchar(50) NOT NULL,
-  `PLast_Name` varchar(50) DEFAULT NULL,
+  `PID` int(11) NOT NULL,
+  `Pusername` varchar(50) DEFAULT NULL,
   `PEmail` varchar(100) NOT NULL,
   `Ppassword` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -90,8 +89,8 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `tutor` (
-  `TFrist_Name` varchar(50) NOT NULL,
-  `TLast_Name` varchar(50) DEFAULT NULL,
+  `TID` int(11) NOT NULL,
+  `Tusername` varchar(50) DEFAULT NULL,
   `TEmail` varchar(100) NOT NULL,
   `Tpassword` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -104,34 +103,67 @@ CREATE TABLE `tutor` (
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`AEmail`);
+  ADD PRIMARY KEY (`AID`);
 
 --
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
-  ADD PRIMARY KEY (`Subject`),
-  ADD UNIQUE KEY `ID` (`ID`),
-  ADD KEY `get_tutor` (`Tutor_Email`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `get_tutor` (`TsID`);
 
 --
 -- Indexes for table `ebook`
 --
 ALTER TABLE `ebook`
   ADD PRIMARY KEY (`Book_ID`),
-  ADD KEY `book_course` (`Book_Subject`);
+  ADD KEY `book_course` (`course_ID`);
 
 --
 -- Indexes for table `parent`
 --
 ALTER TABLE `parent`
-  ADD PRIMARY KEY (`PEmail`);
+  ADD PRIMARY KEY (`PID`);
 
 --
 -- Indexes for table `tutor`
 --
 ALTER TABLE `tutor`
-  ADD PRIMARY KEY (`TEmail`);
+  ADD PRIMARY KEY (`TID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `AID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `course`
+--
+ALTER TABLE `course`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ebook`
+--
+ALTER TABLE `ebook`
+  MODIFY `Book_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `parent`
+--
+ALTER TABLE `parent`
+  MODIFY `PID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tutor`
+--
+ALTER TABLE `tutor`
+  MODIFY `TID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -141,13 +173,13 @@ ALTER TABLE `tutor`
 -- Constraints for table `course`
 --
 ALTER TABLE `course`
-  ADD CONSTRAINT `get_tutor` FOREIGN KEY (`Tutor_Email`) REFERENCES `tutor` (`TEmail`);
+  ADD CONSTRAINT `get_tutor` FOREIGN KEY (`TsID`) REFERENCES `tutor` (`TID`);
 
 --
 -- Constraints for table `ebook`
 --
 ALTER TABLE `ebook`
-  ADD CONSTRAINT `book_course` FOREIGN KEY (`Book_Subject`) REFERENCES `course` (`Subject`);
+  ADD CONSTRAINT `book_course` FOREIGN KEY (`course_ID`) REFERENCES `course` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
